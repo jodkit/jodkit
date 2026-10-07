@@ -1,0 +1,88 @@
+:root {
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+  color: #111;
+  background: #f6f6f6;
+}
+
+body {
+  margin: 0;
+}
+
+.layout {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 2rem;
+}
+
+header {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.75rem;
+}
+
+.muted {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.error {
+  color: #a00;
+}
+
+.collection-list {
+  list-style: none;
+  padding: 0;
+}
+
+.collection-list li {
+  margin: 0.35rem 0;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 0.35rem 0.5rem;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.create-form .field {
+  margin-bottom: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.create-form input,
+.create-form select,
+.create-form textarea {
+  max-width: 28rem;
+  padding: 0.35rem 0.5rem;
+}
+
+.field-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+button {
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  cursor: pointer;
+}
+
+a {
+  color: #0645ad;
+}

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { defineCollection } from "./defineCollection.js";
 import { pagesCollection } from "./collections/pages.js";
+import { postsCollection } from "./collections/posts.js";
 import { productsCollection } from "./collections/products.js";
 import { validateCollectionInput } from "./validateInput.js";
 
@@ -94,5 +95,34 @@ describe("validateCollectionInput", () => {
     const r = validateCollectionInput(pagesCollection, { status: "nope" }, "patch");
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.errors[0]?.code).toBe("INVALID_ENUM");
+  });
+
+  it("posts create accepts valid page_id UUID", () => {
+    const r = validateCollectionInput(
+      postsCollection,
+      {
+        slug: "hello",
+        title: "Hello",
+        body: "Body",
+        page_id: "550e8400-e29b-41d4-a716-446655440000",
+      },
+      "create",
+    );
+    expect(r.ok).toBe(true);
+  });
+
+  it("posts create rejects invalid page_id", () => {
+    const r = validateCollectionInput(
+      postsCollection,
+      {
+        slug: "hello",
+        title: "Hello",
+        body: "Body",
+        page_id: "not-a-uuid",
+      },
+      "create",
+    );
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.errors.some((e) => e.field === "page_id")).toBe(true);
   });
 });

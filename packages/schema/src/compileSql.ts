@@ -20,6 +20,8 @@ function pgType(field: FieldDefinition): string {
       return "timestamptz";
     case "json":
       return "jsonb";
+    case "relation":
+      return "uuid";
     default: {
       const _exhaustive: never = t;
       return _exhaustive;
@@ -47,6 +49,11 @@ function columnDef(field: FieldDefinition): string {
     if (!field.primaryKey) {
       parts.push("DEFAULT now()");
     }
+  }
+
+  if (field.type === "relation" && field.relationTo) {
+    const targetTable = `jodkit_${field.relationTo}`;
+    parts.push(`REFERENCES "${targetTable}"("id")`);
   }
 
   return parts.join(" ");

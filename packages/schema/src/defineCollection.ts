@@ -6,7 +6,8 @@ export type FieldType =
   | "money"
   | "boolean"
   | "datetime"
-  | "json";
+  | "json"
+  | "relation";
 
 export type FieldDefinition = {
   name: string;
@@ -16,6 +17,8 @@ export type FieldDefinition = {
   primaryKey?: boolean;
   /** Allowed values for string/text fields (metadata validation only). */
   enum?: string[];
+  /** Target collection slug for relation fields. */
+  relationTo?: string;
 };
 
 export type CollectionDefinition = {

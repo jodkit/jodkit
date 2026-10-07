@@ -15,6 +15,7 @@
     "test:spikes": "node scripts/run-all-spike-tests.mjs",
     "test:playground": "pnpm --filter @jodkit/playground test",
     "dev:playground": "pnpm --filter @jodkit/playground dev",
+    "dev:admin": "pnpm --filter @jodkit/admin dev",
     "db:spike2": "node scripts/setup-spike2-database.mjs"
   },
   "devDependencies": {

@@ -27,6 +27,13 @@ function mutableFieldNames(collection: CollectionDefinition): string[] {
   return collection.fields.filter((f) => !isReadOnlyOnCreate(f)).map((f) => f.name);
 }
 
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function isUuidString(value: string): boolean {
+  return UUID_RE.test(value);
+}
+
 function validateFieldValue(
   field: FieldDefinition,
   raw: unknown,
@@ -51,6 +58,23 @@ function validateFieldValue(
       return undefined;
     }
     case "uuid":
+    case "relation": {
+      if (typeof raw !== "string" || raw.trim() === "") {
+        return {
+          field: field.name,
+          code: "INVALID_TYPE",
+          message: `${field.name} must be a non-empty UUID string`,
+        };
+      }
+      if (!isUuidString(raw)) {
+        return {
+          field: field.name,
+          code: "INVALID_TYPE",
+          message: `${field.name} must be a valid UUID`,
+        };
+      }
+      return undefined;
+    }
     case "string":
     case "text":
     case "datetime":

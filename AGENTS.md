@@ -4,7 +4,7 @@ Coding agents: read this file first, then the linked artifacts.
 
 ## Project phase
 
-**v0.2 slice 2** (pre-release): CMS `pages` collection, `money` + enum field types (slice 1 auth/`users`/admin API complete). v0.1 complete in `packages/*` and [apps/playground](apps/playground/). Spikes under `apps/spike-*` are frozen regression evidence (`npm run test:spikes`). Scope: [docs/v0.2-scope.md](docs/v0.2-scope.md). License ADR is **not** a blocker for private pre-release code; public release needs [ADR-003](docs/research/adr-003-license.md) and [LICENSE.md](LICENSE.md).
+**v0.2 slice 3** (pre-release): minimal `apps/admin`, `relation` + `posts` (slices 1-2 complete). v0.1 complete in `packages/*` and [apps/playground](apps/playground/). Spikes under `apps/spike-*` are frozen regression evidence (`npm run test:spikes`). Scope: [docs/v0.2-scope.md](docs/v0.2-scope.md). License ADR is **not** a blocker for private pre-release code; public release needs [ADR-003](docs/research/adr-003-license.md) and [LICENSE.md](LICENSE.md).
 
 ## Canonical docs (build tasks)
 

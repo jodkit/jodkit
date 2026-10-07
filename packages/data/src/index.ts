@@ -20,6 +20,14 @@ export {
 export {
   PostgresPageStore,
 } from "./postgresPageStore.js";
+export {
+  PostgresPostStore,
+} from "./postgresPostStore.js";
+export type {
+  CreatePostInput,
+  PatchPostInput,
+  PostRecord,
+} from "./postStore.js";
 export type {
   CreatePageInput,
   PatchPageInput,

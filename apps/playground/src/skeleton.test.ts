@@ -34,7 +34,7 @@ async function truncateTables(connectionString: string): Promise<void> {
   await client.connect();
   try {
     await client.query(
-      'TRUNCATE TABLE "jodkit_products", "jodkit_users", "jodkit_pages" RESTART IDENTITY CASCADE',
+      'TRUNCATE TABLE "jodkit_products", "jodkit_users", "jodkit_pages", "jodkit_posts" RESTART IDENTITY CASCADE',
     );
   } finally {
     await client.end();
@@ -159,6 +159,7 @@ describeDb("walking skeleton", () => {
     expect(doc.paths["/api/products"]).toBeDefined();
     expect(doc.paths["/api/users"]).toBeDefined();
     expect(doc.paths["/api/pages"]).toBeDefined();
+    expect(doc.paths["/api/posts"]).toBeDefined();
   });
 
   it("MCP pages_create and pages_list smoke", async () => {
@@ -240,6 +241,62 @@ describeDb("walking skeleton", () => {
     expect(body.data.some((c) => c.slug === "products")).toBe(true);
     expect(body.data.some((c) => c.slug === "users")).toBe(true);
     expect(body.data.some((c) => c.slug === "pages")).toBe(true);
+    expect(body.data.some((c) => c.slug === "posts")).toBe(true);
+    const pages = body.data.find((c) => c.slug === "pages");
+    const statusField = pages?.fields.find((f: { name: string }) => f.name === "status");
+    expect(statusField?.enum).toEqual(["draft", "published"]);
+    const posts = body.data.find((c) => c.slug === "posts");
+    const pageIdField = posts?.fields.find((f: { name: string }) => f.name === "page_id");
+    expect(pageIdField?.relationTo).toBe("pages");
+  });
+
+  it("POST then GET post with page_id via REST", async () => {
+    const page = await playground.app.inject({
+      method: "POST",
+      url: "/api/pages",
+      payload: {
+        slug: "post-target",
+        title: "Target",
+        body: "Page body",
+        status: "draft",
+      },
+    });
+    const { id: pageId } = page.json() as { id: string };
+
+    const create = await playground.app.inject({
+      method: "POST",
+      url: "/api/posts",
+      payload: {
+        slug: "first-post",
+        title: "First",
+        body: "Post body",
+        page_id: pageId,
+      },
+    });
+    expect(create.statusCode).toBe(201);
+    const created = create.json() as { id: string };
+    const get = await playground.app.inject({
+      method: "GET",
+      url: `/api/posts/${created.id}`,
+    });
+    expect(get.statusCode).toBe(200);
+    expect(get.json()).toMatchObject({ slug: "first-post", page_id: pageId });
+  });
+
+  it("POST post with invalid page_id UUID returns validation error", async () => {
+    const res = await playground.app.inject({
+      method: "POST",
+      url: "/api/posts",
+      payload: {
+        slug: "bad",
+        title: "Bad",
+        body: "x",
+        page_id: "not-uuid",
+      },
+    });
+    expect(res.statusCode).toBe(400);
+    const body = res.json() as { error: { code: string } };
+    expect(body.error.code).toBe("VALIDATION_ERROR");
   });
 
   it("hello plugin ping when allowed", async () => {
