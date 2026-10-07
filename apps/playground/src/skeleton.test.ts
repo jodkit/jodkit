@@ -1,5 +1,6 @@
-import { productsCollection } from "@jodkit/schema/products";
+import { denyAllPermissionChecker, allowAllPermissionChecker } from "@jodkit/kernel";
 import { invokeTool } from "@jodkit/mcp";
+import { productsCollection } from "@jodkit/schema/products";
 import pg from "pg";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
@@ -84,6 +85,14 @@ describeDb("walking skeleton", () => {
 
   it("metadata slug matches API base path", () => {
     expect(`/api/${productsCollection.slug}`).toBe("/api/products");
+  });
+
+  it("permission checker can deny collection list", async () => {
+    playground.kernel.setPermissionChecker(denyAllPermissionChecker);
+    const res = await playground.app.inject({ method: "GET", url: "/api/products" });
+    expect(res.statusCode).toBe(403);
+    expect(res.json()).toEqual({ error: "FORBIDDEN" });
+    playground.kernel.setPermissionChecker(allowAllPermissionChecker);
   });
 
   it("disabled products module gates REST and MCP", async () => {

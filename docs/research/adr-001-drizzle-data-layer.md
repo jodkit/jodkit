@@ -60,6 +60,10 @@ Full comparison: [orm-comparison.md](orm-comparison.md).
 - Modularity: plugins ship schema + migrations; core orchestrates apply order.
 - No silent defaults in code until kernel exists; this ADR is implementation guidance.
 
+## Spike / walking skeleton note
+
+Dynamic `defineCollection` tables use **metadata to reviewable SQL + ledger** for apply ([ADR-004](adr-004-metadata-sql-migrations.md)). Drizzle ORM is used for **application queries** against those tables; Drizzle Kit is not the primary engine for runtime-defined collection metadata in v0.1.
+
 ## Supersedes
 
 Decision authority for ORM choice: supersedes the preliminary recommendation in [orm-comparison.md](orm-comparison.md). Comparison content remains reference.

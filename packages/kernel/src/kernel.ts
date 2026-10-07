@@ -1,6 +1,13 @@
 import { createCapabilityRegistry } from "./capabilities.js";
 import { createEventBus } from "./eventBus.js";
-import type { KernelLike, ModuleContext, ModuleDefinition } from "./types.js";
+import { allowAllPermissionChecker } from "./permissions.js";
+import type {
+  KernelLike,
+  ModuleContext,
+  ModuleDefinition,
+  PermissionChecker,
+  PluginDefinition,
+} from "./types.js";
 
 export class Kernel implements KernelLike {
   readonly version = "0.1.0";
@@ -9,9 +16,22 @@ export class Kernel implements KernelLike {
 
   private modules = new Map<string, ModuleDefinition>();
   private enabled = new Set<string>();
+  private permissionChecker: PermissionChecker = allowAllPermissionChecker;
 
   registerModule(mod: ModuleDefinition): void {
     this.modules.set(mod.manifest.id, mod);
+  }
+
+  registerPlugin(plugin: PluginDefinition): void {
+    this.registerModule(plugin);
+  }
+
+  setPermissionChecker(checker: PermissionChecker): void {
+    this.permissionChecker = checker;
+  }
+
+  async can(action: string, resource?: string, subject = "anonymous"): Promise<boolean> {
+    return this.permissionChecker.can(subject, action, resource);
   }
 
   isModuleEnabled(id: string): boolean {

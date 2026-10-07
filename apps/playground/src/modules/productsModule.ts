@@ -17,6 +17,8 @@ export function createProductsModule(store: ProductStore): ModuleDefinition {
       appsWithProductRoutes.add(ctx.app);
       registerCollectionRestRoutes(ctx.app, productsCollection, store, {
         isEnabled: () => ctx.kernel.isModuleEnabled(PRODUCTS_MODULE_ID),
+        can: (action) =>
+          ctx.kernel.can(action, `collection:${productsCollection.slug}`),
       });
     },
   };

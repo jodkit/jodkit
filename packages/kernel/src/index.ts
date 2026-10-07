@@ -1,6 +1,11 @@
 export { Kernel } from "./kernel.js";
 export { createCapabilityRegistry } from "./capabilities.js";
 export { createEventBus } from "./eventBus.js";
+export {
+  allowAllPermissionChecker,
+  denyAllPermissionChecker,
+  type PermissionChecker as StandalonePermissionChecker,
+} from "./permissions.js";
 export type {
   CapabilityRegistry,
   EventBus,
@@ -8,6 +13,10 @@ export type {
   ModuleContext,
   ModuleDefinition,
   ModuleManifest,
+  PermissionChecker,
+  PermissionDeclaration,
   PlatformEvent,
+  PluginDefinition,
+  PluginManifest,
   StorageProvider,
 } from "./types.js";

@@ -2,7 +2,13 @@
 
 An open-source, modular, **AI-native** full-stack web application platform - a modern alternative to WordPress that combines CMS, themes, plugins, APIs, optional ecommerce, and custom application development under one extensible architecture.
 
-**Status:** Pre-release **implementation spikes + walking skeleton** ([implementation-guide](docs/implementation-guide.md), [v0.1-scope](docs/v0.1-scope.md)). **Selected / Accepted:** Fastify, PostgreSQL, [ADR-001](docs/research/adr-001-drizzle-data-layer.md), [ADR-002](docs/research/adr-002-api-architecture.md). **License before public release:** [ADR-003 Proposed](docs/research/adr-003-license.md). **Agents:** [AGENTS.md](AGENTS.md).
+**Status:** Pre-release **walking skeleton** in [apps/playground](apps/playground/) (`pnpm test:playground`). Spikes 1-5 remain as regression archive (`npm run test:spikes`). **Selected / Accepted:** Fastify, PostgreSQL, [ADR-001](docs/research/adr-001-drizzle-data-layer.md), [ADR-002](docs/research/adr-002-api-architecture.md), [ADR-004](docs/research/adr-004-metadata-sql-migrations.md). **License before public release:** [ADR-003 Proposed](docs/research/adr-003-license.md). **Agents:** [AGENTS.md](AGENTS.md).
+
+```bash
+pnpm install
+pnpm test:playground   # requires DATABASE_URL
+pnpm dev:playground
+```
 
 ## Documentation
 

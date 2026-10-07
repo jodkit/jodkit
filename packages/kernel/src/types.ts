@@ -27,14 +27,34 @@ export type ModuleDefinition = {
   onDisable?(ctx: ModuleContext): Promise<void>;
 };
 
+export type PermissionChecker = {
+  can(subject: string, action: string, resource?: string): Promise<boolean>;
+};
+
+export type PermissionDeclaration = {
+  key: string;
+  description: string;
+};
+
+export type PluginManifest = ModuleManifest & {
+  permissions?: PermissionDeclaration[];
+};
+
+export type PluginDefinition = ModuleDefinition & {
+  manifest: PluginManifest;
+};
+
 export type KernelLike = {
   version: string;
   capabilities: CapabilityRegistry;
   events: EventBus;
   registerModule(mod: ModuleDefinition): void;
+  registerPlugin(plugin: PluginDefinition): void;
   enableModule(id: string, ctx: ModuleContext): Promise<void>;
   disableModule(id: string, ctx: ModuleContext): Promise<void>;
   isModuleEnabled(id: string): boolean;
+  setPermissionChecker(checker: PermissionChecker): void;
+  can(action: string, resource?: string, subject?: string): Promise<boolean>;
   boot(): Promise<void>;
   shutdown(): Promise<void>;
 };

@@ -5,6 +5,8 @@ import type { FastifyInstance } from "fastify";
 export type RestRouteOptions = {
   /** When false, collection routes return 503 MODULE_DISABLED (Spike 5 pattern). */
   isEnabled?: () => boolean;
+  /** v0.1 permission hook: return false to respond 403 FORBIDDEN. */
+  can?: (action: string) => Promise<boolean>;
 };
 
 export function registerCollectionRestRoutes(
@@ -15,10 +17,14 @@ export function registerCollectionRestRoutes(
 ): void {
   const base = `/api/${collection.slug}`;
   const gate = options.isEnabled ?? (() => true);
+  const can = options.can ?? (async () => true);
 
   app.get(base, async (req, reply) => {
     if (!gate()) {
       return reply.code(503).send({ error: "MODULE_DISABLED" });
+    }
+    if (!(await can(`${collection.slug}:list`))) {
+      return reply.code(403).send({ error: "FORBIDDEN" });
     }
     const query = req.query as { limit?: string; offset?: string };
     const limit = Number(query.limit ?? 20);
@@ -29,6 +35,9 @@ export function registerCollectionRestRoutes(
   app.get(`${base}/:id`, async (req, reply) => {
     if (!gate()) {
       return reply.code(503).send({ error: "MODULE_DISABLED" });
+    }
+    if (!(await can(`${collection.slug}:read`))) {
+      return reply.code(403).send({ error: "FORBIDDEN" });
     }
     const { id } = req.params as { id: string };
     const row = await store.get(id);
@@ -41,6 +50,9 @@ export function registerCollectionRestRoutes(
   app.post(base, async (req, reply) => {
     if (!gate()) {
       return reply.code(503).send({ error: "MODULE_DISABLED" });
+    }
+    if (!(await can(`${collection.slug}:create`))) {
+      return reply.code(403).send({ error: "FORBIDDEN" });
     }
     const body = req.body as { name?: string; slug?: string; price?: number };
     if (!body.name || !body.slug || body.price === undefined) {
@@ -65,6 +77,9 @@ export function registerCollectionRestRoutes(
     if (!gate()) {
       return reply.code(503).send({ error: "MODULE_DISABLED" });
     }
+    if (!(await can(`${collection.slug}:update`))) {
+      return reply.code(403).send({ error: "FORBIDDEN" });
+    }
     const { id } = req.params as { id: string };
     const body = req.body as { name?: string; slug?: string; price?: number };
     try {
@@ -84,6 +99,9 @@ export function registerCollectionRestRoutes(
   app.delete(`${base}/:id`, async (req, reply) => {
     if (!gate()) {
       return reply.code(503).send({ error: "MODULE_DISABLED" });
+    }
+    if (!(await can(`${collection.slug}:delete`))) {
+      return reply.code(403).send({ error: "FORBIDDEN" });
     }
     const { id } = req.params as { id: string };
     const ok = await store.delete(id);

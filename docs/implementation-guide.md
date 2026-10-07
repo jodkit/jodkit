@@ -217,9 +217,9 @@ See [apps/playground/README.md](../apps/playground/README.md). Requires `DATABAS
 
 1. ~~Complete [spikes 1-5](research/implementation-spikes.md)~~ **Done** (2026-10-07).
 2. ~~Create `packages/kernel`, `schema`, `data`, `api`, `mcp`~~ **Done**; evolve in place.
-3. Implement `products` collection end-to-end.
-4. Add second module or plugin only after skeleton tests pass.
-5. Update ADRs with spike outcomes.
+3. ~~Implement `products` collection end-to-end.~~ **Done** in [apps/playground](../apps/playground/).
+4. **v0.1 hardening:** permission check hooks, plugin `registerPlugin`, CI; defer second domain module until hooks are stable.
+5. ~~Update ADRs with spike outcomes.~~ **ADR-004** accepted; **ADR-005** reserved for module disable UX if needed.
 
 ## What not to build yet
 

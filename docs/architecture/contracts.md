@@ -1,6 +1,6 @@
 # JodKit platform contracts (conceptual)
 
-**Status:** Pre-code interface definitions. Not runnable TypeScript in repo yet.
+**Status:** Conceptual contracts; partial implementations in `packages/kernel`, `packages/schema`, `packages/data`, `packages/api`, `packages/mcp` ([apps/playground](../../apps/playground/)).
 
 **Rule:** Core defines these contracts. Modules and plugins implement them. **Fastify, Drizzle, and vendor SDKs must not become the public extension API.**
 

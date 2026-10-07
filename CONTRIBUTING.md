@@ -1,6 +1,6 @@
 # Contributing to JodKit
 
-Thank you for interest in JodKit. The project is moving from **Architecture / Research** into **implementation spikes** and a walking skeleton. See [docs/roadmap.md](docs/roadmap.md).
+Thank you for interest in JodKit. The **walking skeleton** lives in [apps/playground](apps/playground/) and `packages/*`; spike apps are frozen regression archives. See [docs/roadmap.md](docs/roadmap.md).
 
 ## Before you start
 
@@ -32,7 +32,8 @@ Repo **documentation and tooling** use **keyboard-only characters** (standard En
 One-time setup after cloning:
 
 ```bash
-npm install
+pnpm install          # workspace: packages + playground
+npm install           # root husky only; spike apps use npm per folder
 ```
 
 The `prepare` script installs [Husky](https://typicode.github.io/husky/) so **pre-commit** runs ASCII checks on **staged** files only.
