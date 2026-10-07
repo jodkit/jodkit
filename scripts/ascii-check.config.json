@@ -1,0 +1,5 @@
+{
+  "extensions": [".md", ".json", ".yml", ".yaml", ".ts", ".tsx", ".js", ".mjs", ".cjs"],
+  "ignorePathSegments": [".git", "node_modules"],
+  "ignoreFiles": []
+}

@@ -1,0 +1,15 @@
+{
+  "name": "jodkit",
+  "private": true,
+  "description": "JodKit documentation and tooling (Architecture / Research phase)",
+  "scripts": {
+    "check:ascii": "node scripts/check-keyboard-only.mjs",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
