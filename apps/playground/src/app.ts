@@ -1,8 +1,9 @@
 import { buildOpenApiDoc } from "@jodkit/api";
 import {
+  createMigrationRegistry,
   defaultMigrationsDir,
   PostgresProductStore,
-  runMigrations,
+  runRegisteredMigrations,
   type ProductStore,
 } from "@jodkit/data";
 import { Kernel } from "@jodkit/kernel";
@@ -10,6 +11,7 @@ import { buildMcpTools, invokeTool, type McpTool } from "@jodkit/mcp";
 import { productsCollection } from "@jodkit/schema/products";
 import Fastify, { type FastifyInstance } from "fastify";
 import pg from "pg";
+import { helloPlugin } from "./plugins/helloPlugin.js";
 import { createProductsModule, PRODUCTS_MODULE_ID } from "./modules/productsModule.js";
 import { stubStorageModule } from "./modules/stubStorageModule.js";
 
@@ -22,7 +24,11 @@ export type PlaygroundApp = {
 };
 
 export async function buildPlaygroundApp(databaseUrl: string): Promise<PlaygroundApp> {
-  await runMigrations(databaseUrl, defaultMigrationsDir());
+  const migrationRegistry = createMigrationRegistry();
+  migrationRegistry.register("products", defaultMigrationsDir());
+  await runRegisteredMigrations(databaseUrl, migrationRegistry, {
+    coreDir: defaultMigrationsDir(),
+  });
 
   const pool = new pg.Pool({ connectionString: databaseUrl });
   const store = new PostgresProductStore(pool);
@@ -34,9 +40,11 @@ export async function buildPlaygroundApp(databaseUrl: string): Promise<Playgroun
 
   kernel.registerModule(createProductsModule(store));
   kernel.registerModule(stubStorageModule);
+  kernel.registerPlugin(helloPlugin);
 
   const mcpTools = buildMcpTools(productsCollection, store, {
     isEnabled: () => kernel.isModuleEnabled(PRODUCTS_MODULE_ID),
+    can: (action) => kernel.can(action, `collection:${productsCollection.slug}`),
   });
 
   app.get("/health", async () => ({ ok: true, version: kernel.version }));
@@ -59,6 +67,9 @@ export async function buildPlaygroundApp(databaseUrl: string): Promise<Playgroun
       if (e instanceof Error && e.message === "MODULE_DISABLED") {
         return reply.code(503).send({ error: "MODULE_DISABLED" });
       }
+      if (e instanceof Error && e.message === "FORBIDDEN") {
+        return reply.code(403).send({ error: "FORBIDDEN" });
+      }
       if (e instanceof Error && e.message === "NOT_FOUND") {
         return reply.code(404).send({ error: "NOT_FOUND" });
       }
@@ -78,4 +89,5 @@ export async function enableWalkingSkeletonModules(playground: PlaygroundApp): P
   const ctx = { kernel: playground.kernel, app: playground.app };
   await playground.kernel.enableModule(PRODUCTS_MODULE_ID, ctx);
   await playground.kernel.enableModule("stub-storage-demo", ctx);
+  await playground.kernel.enableModule("hello-plugin", ctx);
 }

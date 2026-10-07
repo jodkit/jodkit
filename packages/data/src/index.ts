@@ -5,6 +5,12 @@ export {
   type MigrateResult,
 } from "./migrate.js";
 export {
+  createMigrationRegistry,
+  runRegisteredMigrations,
+  type MigrationRegistry,
+  type RunRegisteredMigrationsResult,
+} from "./migrationRegistry.js";
+export {
   PostgresProductStore,
 } from "./postgresProductStore.js";
 export type {

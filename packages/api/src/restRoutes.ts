@@ -1,5 +1,10 @@
 import type { ProductStore } from "@jodkit/data";
-import type { CollectionDefinition } from "@jodkit/schema";
+import {
+  asProductCreateInput,
+  asProductPatchInput,
+  validateCollectionInput,
+  type CollectionDefinition,
+} from "@jodkit/schema";
 import type { FastifyInstance } from "fastify";
 
 export type RestRouteOptions = {
@@ -54,16 +59,14 @@ export function registerCollectionRestRoutes(
     if (!(await can(`${collection.slug}:create`))) {
       return reply.code(403).send({ error: "FORBIDDEN" });
     }
-    const body = req.body as { name?: string; slug?: string; price?: number };
-    if (!body.name || !body.slug || body.price === undefined) {
-      return reply.code(400).send({ error: { code: "VALIDATION_ERROR", message: "Invalid body" } });
+    const validated = validateCollectionInput(collection, req.body, "create");
+    if (!validated.ok) {
+      return reply.code(400).send({
+        error: { code: "VALIDATION_ERROR", message: "Invalid body", details: validated.errors },
+      });
     }
     try {
-      const created = await store.create({
-        name: body.name,
-        slug: body.slug,
-        price: Number(body.price),
-      });
+      const created = await store.create(asProductCreateInput(validated.value));
       return reply.code(201).send(created);
     } catch (e) {
       if (e instanceof Error && e.message.startsWith("CONFLICT")) {
@@ -81,9 +84,14 @@ export function registerCollectionRestRoutes(
       return reply.code(403).send({ error: "FORBIDDEN" });
     }
     const { id } = req.params as { id: string };
-    const body = req.body as { name?: string; slug?: string; price?: number };
+    const validated = validateCollectionInput(collection, req.body, "patch");
+    if (!validated.ok) {
+      return reply.code(400).send({
+        error: { code: "VALIDATION_ERROR", message: "Invalid body", details: validated.errors },
+      });
+    }
     try {
-      const updated = await store.patch(id, body);
+      const updated = await store.patch(id, asProductPatchInput(validated.value));
       if (!updated) {
         return reply.code(404).send({ error: { code: "NOT_FOUND", message: "Not found" } });
       }

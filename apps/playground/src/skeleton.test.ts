@@ -8,6 +8,7 @@ import {
   enableWalkingSkeletonModules,
   type PlaygroundApp,
 } from "./app.js";
+import { HELLO_PLUGIN_ID, HELLO_PING_PATH } from "./plugins/helloPlugin.js";
 import { PRODUCTS_MODULE_ID } from "./modules/productsModule.js";
 
 const url = process.env.DATABASE_URL;
@@ -35,6 +36,7 @@ describeDb("walking skeleton", () => {
   beforeEach(async () => {
     if (!url) return;
     await truncateProducts(url);
+    playground.kernel.setPermissionChecker(allowAllPermissionChecker);
   });
 
   afterAll(async () => {
@@ -57,6 +59,18 @@ describeDb("walking skeleton", () => {
     });
     expect(get.statusCode).toBe(200);
     expect(get.json()).toMatchObject({ name: "Widget", slug: "widget", price: 9.99 });
+  });
+
+  it("POST with invalid body returns validation error", async () => {
+    const res = await playground.app.inject({
+      method: "POST",
+      url: "/api/products",
+      payload: { name: "Only name" },
+    });
+    expect(res.statusCode).toBe(400);
+    const body = res.json() as { error: { code: string; details: unknown[] } };
+    expect(body.error.code).toBe("VALIDATION_ERROR");
+    expect(body.error.details.length).toBeGreaterThan(0);
   });
 
   it("OpenAPI document includes products paths", async () => {
@@ -87,12 +101,47 @@ describeDb("walking skeleton", () => {
     expect(`/api/${productsCollection.slug}`).toBe("/api/products");
   });
 
-  it("permission checker can deny collection list", async () => {
+  it("permission checker can deny collection list (REST)", async () => {
     playground.kernel.setPermissionChecker(denyAllPermissionChecker);
     const res = await playground.app.inject({ method: "GET", url: "/api/products" });
     expect(res.statusCode).toBe(403);
     expect(res.json()).toEqual({ error: "FORBIDDEN" });
-    playground.kernel.setPermissionChecker(allowAllPermissionChecker);
+  });
+
+  it("permission checker can deny MCP list", async () => {
+    playground.kernel.setPermissionChecker(denyAllPermissionChecker);
+    const mcp = await playground.app.inject({
+      method: "POST",
+      url: "/mcp/invoke",
+      payload: { name: "products_list", args: {} },
+    });
+    expect(mcp.statusCode).toBe(403);
+    expect(mcp.json()).toEqual({ error: "FORBIDDEN" });
+  });
+
+  it("hello plugin ping when allowed", async () => {
+    const res = await playground.app.inject({ method: "GET", url: HELLO_PING_PATH });
+    expect(res.statusCode).toBe(200);
+    expect(res.json()).toEqual({ ok: true, pluginId: HELLO_PLUGIN_ID });
+  });
+
+  it("hello plugin ping forbidden when checker denies", async () => {
+    playground.kernel.setPermissionChecker(denyAllPermissionChecker);
+    const res = await playground.app.inject({ method: "GET", url: HELLO_PING_PATH });
+    expect(res.statusCode).toBe(403);
+  });
+
+  it("hello plugin disabled returns 503", async () => {
+    await playground.kernel.disableModule(HELLO_PLUGIN_ID, {
+      kernel: playground.kernel,
+      app: playground.app,
+    });
+    const res = await playground.app.inject({ method: "GET", url: HELLO_PING_PATH });
+    expect(res.statusCode).toBe(503);
+    await playground.kernel.enableModule(HELLO_PLUGIN_ID, {
+      kernel: playground.kernel,
+      app: playground.app,
+    });
   });
 
   it("disabled products module gates REST and MCP", async () => {

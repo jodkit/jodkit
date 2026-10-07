@@ -1,5 +1,9 @@
 import type { ProductStore } from "@jodkit/data";
-import type { CollectionDefinition } from "@jodkit/schema";
+import {
+  asProductCreateInput,
+  validateCollectionInput,
+  type CollectionDefinition,
+} from "@jodkit/schema";
 
 export type McpTool = {
   name: string;
@@ -7,12 +11,18 @@ export type McpTool = {
   handler: (args: Record<string, unknown>) => Promise<unknown>;
 };
 
+export type McpToolOptions = {
+  isEnabled?: () => boolean;
+  can?: (action: string) => Promise<boolean>;
+};
+
 export function buildMcpTools(
   collection: CollectionDefinition,
   store: ProductStore,
-  options: { isEnabled?: () => boolean } = {},
+  options: McpToolOptions = {},
 ): McpTool[] {
   const gate = options.isEnabled ?? (() => true);
+  const can = options.can ?? (async () => true);
 
   if (collection.slug !== "products") {
     return [];
@@ -22,12 +32,17 @@ export function buildMcpTools(
     if (!gate()) throw new Error("MODULE_DISABLED");
   };
 
+  const assertCan = async (action: string) => {
+    if (!(await can(action))) throw new Error("FORBIDDEN");
+  };
+
   return [
     {
       name: `${collection.slug}_list`,
       description: `List ${collection.slug}`,
       handler: async (args) => {
         assertEnabled();
+        await assertCan(`${collection.slug}:list`);
         const limit = Number(args.limit ?? 20);
         const offset = Number(args.offset ?? 0);
         return store.list(limit, offset);
@@ -38,6 +53,7 @@ export function buildMcpTools(
       description: `Get ${collection.slug} by id`,
       handler: async (args) => {
         assertEnabled();
+        await assertCan(`${collection.slug}:read`);
         const id = String(args.id ?? "");
         const row = await store.get(id);
         if (!row) throw new Error("NOT_FOUND");
@@ -49,10 +65,12 @@ export function buildMcpTools(
       description: `Create ${collection.slug}`,
       handler: async (args) => {
         assertEnabled();
-        const name = String(args.name ?? "");
-        const slug = String(args.slug ?? "");
-        const price = Number(args.price);
-        return store.create({ name, slug, price });
+        await assertCan(`${collection.slug}:create`);
+        const validated = validateCollectionInput(collection, args, "create");
+        if (!validated.ok) {
+          throw new Error(`VALIDATION_ERROR:${JSON.stringify(validated.errors)}`);
+        }
+        return store.create(asProductCreateInput(validated.value));
       },
     },
   ];

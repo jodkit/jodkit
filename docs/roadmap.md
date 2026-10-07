@@ -1,6 +1,6 @@
 # Roadmap
 
-**Current stage:** **Walking skeleton landed** ([apps/playground](../apps/playground/), `packages/*`); **v0.1 hardening** (permissions, plugin registration, CI) in progress. ([Foundation section 59](project-foundation-v0.1.md#59-project-status)).
+**Current stage:** **v0.1 wedge complete** (walking skeleton + hardening in [apps/playground](../apps/playground/), `packages/*`). **Next:** v0.2 (CMS fields, auth, basic admin) per table below. ([Foundation section 59](project-foundation-v0.1.md#59-project-status)).
 
 **Selected / Accepted for planning:** Fastify, PostgreSQL, data layer ([ADR-001](research/adr-001-drizzle-data-layer.md)), API ([ADR-002](research/adr-002-api-architecture.md)). **License** is [ADR-003 Proposed](research/adr-003-license.md) - required before **first public release**, not before private or pre-release kernel work ([GOVERNANCE.md](../GOVERNANCE.md)).
 
