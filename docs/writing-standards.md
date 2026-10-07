@@ -2,6 +2,12 @@
 
 **This rule applies to repository documentation and tooling defaults:** all docs, templates, `.ai/` files, README, governance files, and (when code exists) **default** English strings in core, comments, log messages, and error text unless a listed exception applies. It does **not** apply to end-user content or i18n locale files (CMS must support Unicode).
 
+## Where this policy is documented
+
+Do **not** repeat a writing banner on every markdown file. Product and architecture docs should stay focused on JodKit.
+
+Contributors find the rule in [CONTRIBUTING.md](../CONTRIBUTING.md). Enforcement is automated (Husky pre-commit, CI). Agents see [.ai/conventions.md](../.ai/conventions.md) and [AGENTS.md](../AGENTS.md).
+
 ## Keyboard-only characters
 
 Use **only** characters you can type on a standard English QWERTY keyboard.
@@ -76,6 +82,7 @@ If you believe an exception is required, say so in the PR and update this file o
 - **Local:** `npm install` enables a Husky pre-commit hook that runs `npm run check:ascii -- --staged`.
 - **CI:** GitHub Actions workflow `keyboard-only.yml` runs `npm run check:ascii -- --all` on pull requests and pushes to `main`.
 - **Implementation:** [scripts/check-keyboard-only.mjs](../scripts/check-keyboard-only.mjs) and [scripts/ascii-check.config.json](../scripts/ascii-check.config.json).
+- When `locales/` or `**/i18n/**` directories exist, add them to `ignoreFiles` or ignore globs in `ascii-check.config.json` so locale content is not scanned.
 
 ## Related
 

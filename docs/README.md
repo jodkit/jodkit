@@ -4,8 +4,6 @@
 
 When thematic summaries disagree with foundation, **[Project Foundation v0.1](project-foundation-v0.1.md)** wins. For **current build phase**, implementation contracts below take precedence over duplicate prose in thematic docs.
 
-**Writing:** Repo docs use keyboard-only (ASCII). See [writing-standards.md](writing-standards.md).
-
 ## Implementation phase (read before coding)
 
 1. [v0.1-scope.md](v0.1-scope.md) - IN / OUT boundary

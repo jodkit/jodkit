@@ -8,16 +8,18 @@ An open-source, modular, **AI-native** full-stack web application platform - a m
 
 Start here: **[docs/README.md](docs/README.md)**
 
-All repo text uses keyboard-only (ASCII) characters: [docs/writing-standards.md](docs/writing-standards.md).
-
 | Doc | Purpose |
 |-----|---------|
 | [Project Foundation v0.1](docs/project-foundation-v0.1.md) | Canonical full reference (sections 1-59) |
+| [Implementation guide](docs/implementation-guide.md) | Build phase bridge; walking skeleton |
+| [v0.1 scope](docs/v0.1-scope.md) | IN / OUT boundary for first code |
+| [Platform contracts](docs/architecture/contracts.md) | Conceptual interfaces before packages |
+| [Implementation spikes](docs/research/implementation-spikes.md) | Ordered code experiments |
 | [Vision](docs/vision.md) | Product vision and boundaries |
 | [Principles](docs/principles.md) | Architectural laws |
 | [Architecture](docs/architecture.md) | Kernel, modules, APIs, deployment |
 | [Roadmap](docs/roadmap.md) | Milestones and [open decisions](docs/roadmap.md#decisions-not-yet-final) |
-| [Research tracker](docs/research/README.md) | Technical comparisons (next phase) |
+| [Research tracker](docs/research/README.md) | ADRs and technical comparisons |
 
 ## For AI agents
 

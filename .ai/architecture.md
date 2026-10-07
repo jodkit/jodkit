@@ -4,8 +4,6 @@
 **Entry:** [AGENTS.md](../AGENTS.md)  
 **Canonical source:** [docs/project-foundation-v0.1.md](../docs/project-foundation-v0.1.md)
 
-**Writing:** Keyboard-only (ASCII) characters only. See [docs/writing-standards.md](../docs/writing-standards.md).
-
 ## Stack status (v0.2)
 
 **Selected / Accepted (planning commitment - not implemented):**
