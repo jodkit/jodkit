@@ -1,10 +1,21 @@
 {
   "name": "jodkit",
   "private": true,
-  "description": "JodKit documentation and tooling (Architecture / Research phase)",
+  "description": "JodKit platform (walking skeleton + spike regression archive)",
+  "packageManager": "pnpm@9.15.4",
   "scripts": {
     "check:ascii": "node scripts/check-keyboard-only.mjs",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "pnpm -r --filter \"@jodkit/*\" test",
+    "test:spike-1": "npm test --prefix apps/spike-1",
+    "test:spike-2": "npm test --prefix apps/spike-2-schema",
+    "test:spike-3": "npm test --prefix apps/spike-3-api",
+    "test:spike-4": "npm test --prefix apps/spike-4-modules",
+    "test:spike-5": "npm test --prefix apps/spike-5-disable",
+    "test:spikes": "node scripts/run-all-spike-tests.mjs",
+    "test:playground": "pnpm --filter @jodkit/playground test",
+    "dev:playground": "pnpm --filter @jodkit/playground dev",
+    "db:spike2": "node scripts/setup-spike2-database.mjs"
   },
   "devDependencies": {
     "husky": "^9.1.7"

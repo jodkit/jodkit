@@ -1,0 +1,22 @@
+{
+  "name": "@jodkit/spike-3-api",
+  "private": true,
+  "type": "module",
+  "description": "Spike 3: REST + OpenAPI + MCP from collection metadata",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "fastify": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

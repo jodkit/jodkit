@@ -1,6 +1,6 @@
 # Roadmap
 
-**Current stage:** Architecture / Research moving into **implementation spike** ([Foundation section 59](project-foundation-v0.1.md#59-project-status)).
+**Current stage:** **Spikes 1-5 complete**; **walking skeleton NEXT** (`packages/*`, [apps/playground](../apps/playground/)). ([Foundation section 59](project-foundation-v0.1.md#59-project-status)).
 
 **Selected / Accepted for planning:** Fastify, PostgreSQL, data layer ([ADR-001](research/adr-001-drizzle-data-layer.md)), API ([ADR-002](research/adr-002-api-architecture.md)). **License** is [ADR-003 Proposed](research/adr-003-license.md) - required before **first public release**, not before private or pre-release kernel work ([GOVERNANCE.md](../GOVERNANCE.md)).
 
@@ -37,7 +37,7 @@ Directionally agreed (see [Foundation section 53](project-foundation-v0.1.md#53-
 |------|----------|
 | Backend | Fastify |
 | Database | PostgreSQL |
-| Data layer | Drizzle + SQL escape hatch (ADR-001; validate in spike) |
+| Data layer | Drizzle queries + metadata-driven SQL migrations (ADR-001, [ADR-004](research/adr-004-metadata-sql-migrations.md)) |
 | API (v0.1) | REST + OpenAPI + MCP (ADR-002; GraphQL v0.5+) |
 
 ## Proposed direction (stack v0.2)
@@ -69,7 +69,7 @@ Auth, i18n, drafts/versioning, preview, backups, config-in-code vs DB (WordPress
 
 ## ADRs
 
-1. **Accepted (spike validation recommended):** [ADR-001](research/adr-001-drizzle-data-layer.md), [ADR-002](research/adr-002-api-architecture.md)
+1. **Accepted:** [ADR-001](research/adr-001-drizzle-data-layer.md), [ADR-002](research/adr-002-api-architecture.md); spike-validated migration path: [ADR-004](research/adr-004-metadata-sql-migrations.md)
 2. **Proposed:** [ADR-003 License](research/adr-003-license.md)
 
 **Also documented:** [BullMQ PostgreSQL queue validation](research/queue-bullmq-postgresql.md).

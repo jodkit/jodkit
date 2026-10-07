@@ -4,7 +4,7 @@ Coding agents: read this file first, then the linked artifacts.
 
 ## Project phase
 
-**Implementation spikes + walking skeleton** (pre-release). License ADR is **not** a blocker for private pre-release code; public release needs [ADR-003](docs/research/adr-003-license.md) and [LICENSE.md](LICENSE.md).
+**Walking skeleton** (pre-release). Spikes 1-5 are **complete** (`npm run test:spikes`); build in `packages/*` and [apps/playground](apps/playground/). Spike apps under `apps/spike-*` are frozen regression evidence. License ADR is **not** a blocker for private pre-release code; public release needs [ADR-003](docs/research/adr-003-license.md) and [LICENSE.md](LICENSE.md).
 
 ## Canonical docs (build tasks)
 
@@ -32,6 +32,6 @@ Data/API/testing: [data-model.md](docs/data-model.md), [api-contract.md](docs/ap
 
 **One metadata definition** generates REST, OpenAPI, MCP, and admin (later) behind **stable capability contracts** - not generic AI manifest folders.
 
-## Spikes before large data-layer work
+## Build path
 
-[docs/research/implementation-spikes.md](docs/research/implementation-spikes.md)
+Canonical app: [apps/playground](apps/playground/). Spike history: [docs/research/implementation-spikes.md](docs/research/implementation-spikes.md).

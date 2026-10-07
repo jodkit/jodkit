@@ -1,0 +1,26 @@
+{
+  "name": "@jodkit/spike-2-schema",
+  "private": true,
+  "type": "module",
+  "description": "Spike 2: defineCollection metadata to PostgreSQL migration + ledger",
+  "scripts": {
+    "generate": "tsx scripts/generate-migration.ts",
+    "migrate": "tsx src/cli-migrate.ts",
+    "test": "vitest run",
+    "test:unit": "vitest run src/compile.test.ts"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.38.3",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/pg": "^8.11.10",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -201,21 +201,22 @@ This is **not** ecommerce module, WordPress parity, themes, or admin UI.
 
 Register a minimal capability (e.g. `storage` or a stub `demo`) with one in-process provider resolved at runtime (Spike 4).
 
-### How to run (TBD until packages exist)
+### How to run
 
 ```bash
-# Placeholder - create when monorepo lands
 pnpm install
-pnpm --filter @jodkit/playground dev
-# Requires DATABASE_URL - see configuration.md
+cp apps/playground/.env.example apps/playground/.env   # set DATABASE_URL
+pnpm --filter @jodkit/playground dev                   # http://127.0.0.1:3010
+pnpm test:playground                                 # walking skeleton tests
+pnpm test:spikes                                     # frozen spike regression archive
 ```
 
-Document actual scripts in this section when `apps/playground` exists.
+See [apps/playground/README.md](../apps/playground/README.md). Requires `DATABASE_URL` ([configuration.md](configuration.md)).
 
 ## Implementation order
 
-1. Complete [spikes 1-5](research/implementation-spikes.md) in order (or parallel where independent).
-2. Create `packages/kernel`, `schema`, `data`, `api`, `mcp` as needed by skeleton.
+1. ~~Complete [spikes 1-5](research/implementation-spikes.md)~~ **Done** (2026-10-07).
+2. ~~Create `packages/kernel`, `schema`, `data`, `api`, `mcp`~~ **Done**; evolve in place.
 3. Implement `products` collection end-to-end.
 4. Add second module or plugin only after skeleton tests pass.
 5. Update ADRs with spike outcomes.

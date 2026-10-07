@@ -17,6 +17,7 @@ Parent context: [Roadmap](../roadmap.md) | [Foundation section 55](../project-fo
 | [adr-001-drizzle-data-layer.md](adr-001-drizzle-data-layer.md) | Drizzle + SQL escape hatch on PostgreSQL | **Accepted** |
 | [adr-002-api-architecture.md](adr-002-api-architecture.md) | REST, OpenAPI, optional GraphQL, MCP | **Accepted** |
 | [adr-003-license.md](adr-003-license.md) | Platform license | **Proposed** |
+| [adr-004-metadata-sql-migrations.md](adr-004-metadata-sql-migrations.md) | Metadata to reviewable SQL + ledger | **Accepted** |
 
 ## Tracker
 
@@ -28,7 +29,7 @@ Parent context: [Roadmap](../roadmap.md) | [Foundation section 55](../project-fo
 | ORM / data layer | Drizzle vs Kysely vs Prisma; plugin migrations | **Accepted** | [ADR-001](adr-001-drizzle-data-layer.md), [orm-comparison.md](orm-comparison.md) | - |
 | API architecture | REST + GraphQL + OpenAPI + MCP | **Accepted** | [ADR-002](adr-002-api-architecture.md), [api-architecture-research.md](api-architecture-research.md) | - |
 | License | AGPL vs MIT vs Apache; plugins, SaaS | **ADR Proposed** | [ADR-003](adr-003-license.md), [license-research.md](license-research.md) | - |
-| Implementation spikes | Spikes 1-5 (see doc) | Not started | [implementation-spikes.md](implementation-spikes.md) | - |
+| Implementation spikes | Spikes 1-5 (see doc) | **Complete** | [implementation-spikes.md](implementation-spikes.md) | - |
 | Queue | BullMQ PostgreSQL backend | Draft complete (validation) | [queue-bullmq-postgresql.md](queue-bullmq-postgresql.md) | - |
 | Frontend | Next.js default (proposed); adapter model | Proposed in stack doc | [stack-direction-v0.2.md](stack-direction-v0.2.md#4-frontend-proposed-nextjs-default-core-independent) | - |
 | CMS architecture | WordPress, Payload, Strapi, Directus, Ghost, ... | Not started | - | - |

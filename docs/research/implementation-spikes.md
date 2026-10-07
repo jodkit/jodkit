@@ -1,6 +1,6 @@
 # Implementation spikes
 
-**Status:** Ordered **code experiments** before the walking skeleton. Paper ADRs are not enough.
+**Status:** **Spikes 1-5 COMPLETE** (2026-10-07). Evidence: `npm run test:spikes` -- 5/5 spike apps pass; Spike 2 PostgreSQL integration runs when `apps/spike-2-schema/.env` sets `DATABASE_URL`. Spike apps remain frozen regression archives under `apps/spike-*`; walking skeleton lives in `packages/*` and `apps/playground`. Paper ADRs alone were not enough; these spikes validated the path.
 
 Parent: [implementation-guide.md](../implementation-guide.md) | [v0.1-scope.md](../v0.1-scope.md) | [ADR-001](adr-001-drizzle-data-layer.md) | [ADR-002](adr-002-api-architecture.md)
 
@@ -31,7 +31,7 @@ Fastify + minimal JodKit Kernel
 - Kernel lifecycle runs without throwing
 - Health route passes manual or automated check
 
-**Artifacts:** Spike branch or `apps/spike-1` folder (team choice); notes in PR or spike log.
+**App folder:** [apps/spike-1](../../apps/spike-1/) (separate app per spike after Spike 1). Log: `SPIKE.md` in that folder (Question / Experiment / Result / Decision only).
 
 ---
 
@@ -60,7 +60,7 @@ PostgreSQL + Drizzle + JodKit schema/collection -> migration
 - Migration recorded in ledger table
 - Repeatable on clean DB
 
-**Failure path:** If Drizzle Kit fight is too costly, document Kysely + custom migrator and propose ADR-001 amendment.
+**Failure path:** If Drizzle Kit fight is too costly, log decision in Spike 2 `SPIKE.md` and open **ADR-004** (or next free number) - do not reuse ADR-001/002 numbers for new decisions.
 
 ---
 
@@ -157,7 +157,7 @@ Verify:
 - Automated test: disabled -> `404` or gate on module routes; events not delivered
 - Written decision for production enable/disable (reload strategy)
 
-**Update:** ADR-002 consequences or short ADR addendum with chosen pattern.
+**Update:** Record disable/reload pattern in Spike 5 `SPIKE.md`; if platform-wide decision needed, add **ADR-004+** (not an informal ADR-002 rewrite).
 
 ---
 
@@ -167,8 +167,20 @@ Not required for walking skeleton. See [queue-bullmq-postgresql.md](queue-bullmq
 
 ---
 
+## Spike app folders (after Spike 1 passes)
+
+```text
+apps/spike-1/           Fastify + kernel boot (Spike 1)
+apps/spike-2-schema/    PostgreSQL + Drizzle + defineCollection (Spike 2)
+apps/spike-3-api/       REST + OpenAPI + MCP (Spike 3)
+apps/spike-4-modules/   module + capability + event (Spike 4)
+apps/spike-5-disable/   disabled module behavior (Spike 5)
+```
+
+Promote proven code to `packages/*` only after Spike 2/3 stabilize.
+
 ## After spikes
 
-1. Update [ADR-001](adr-001-drizzle-data-layer.md) / [ADR-002](adr-002-api-architecture.md) with spike outcomes.
+1. File new ADRs (**004+**) only when a spike Decision requires it; link from spike `SPIKE.md`.
 2. Build walking skeleton per [implementation-guide.md](../implementation-guide.md#walking-skeleton).
 3. Do not start commerce, themes, or GraphQL.
