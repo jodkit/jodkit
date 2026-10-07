@@ -1,6 +1,6 @@
 # Writing standards (strict)
 
-**This rule applies everywhere in the JodKit repository:** all docs, templates, `.ai/` files, README, governance files, and (when code exists) user-facing strings, comments, log messages, and error text unless a listed exception applies.
+**This rule applies to repository documentation and tooling defaults:** all docs, templates, `.ai/` files, README, governance files, and (when code exists) **default** English strings in core, comments, log messages, and error text unless a listed exception applies. It does **not** apply to end-user content or i18n locale files (CMS must support Unicode).
 
 ## Keyboard-only characters
 
@@ -61,6 +61,7 @@ jodkit/
 1. **URLs** in links may contain encoded or international characters.
 2. **Quoted third-party material** inside a clearly marked quote block, if ASCII would change the meaning.
 3. **Proper names** that officially include accents (use sparingly; prefer ASCII slug in paths and IDs).
+4. **Internationalization and user-generated content** (locale JSON/PO files, CMS field values, theme copy, stored HTML) - Unicode required; ASCII-only rule does not apply to those paths when added (configure check script excludes if needed).
 
 If you believe an exception is required, say so in the PR and update this file only with maintainer agreement.
 

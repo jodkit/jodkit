@@ -50,4 +50,4 @@ Exact APIs will be specified when the kernel is implemented.
 
 ## When suggesting code changes
 
-Until implementation phase: propose ADRs and doc updates, not `packages/` or `modules/` scaffolding unless explicitly requested.
+Implementation phase: primary build doc is [docs/implementation-guide.md](../docs/implementation-guide.md). Scope: [docs/v0.1-scope.md](../docs/v0.1-scope.md). Contracts: [docs/architecture/contracts.md](../docs/architecture/contracts.md). Run **spikes** ([implementation-spikes.md](../docs/research/implementation-spikes.md)) before large data-layer work. License ADR does not block private pre-release code.

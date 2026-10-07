@@ -4,7 +4,7 @@ JodKit treats security as a **platform requirement from day one**, including fut
 
 ## Current phase
 
-This repository contains **documentation only**. There is no production deployment or runnable application surface yet.
+This repository is in **pre-release development** (implementation spikes and walking skeleton). There is **no production deployment** or supported production surface yet. Report issues in application code once it exists using the channels below.
 
 ## Reporting vulnerabilities
 

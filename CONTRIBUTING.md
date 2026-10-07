@@ -1,29 +1,31 @@
 # Contributing to JodKit
 
-Thank you for interest in JodKit. The project is in **Architecture / Research**. Contributions should strengthen documentation, research, and architectural decisions - not jump ahead to a full implementation without agreed boundaries.
+Thank you for interest in JodKit. The project is moving from **Architecture / Research** into **implementation spikes** and a walking skeleton. See [docs/roadmap.md](docs/roadmap.md).
 
 ## Before you start
 
-1. Read [docs/README.md](docs/README.md) and skim [docs/project-foundation-v0.1.md](docs/project-foundation-v0.1.md).
-2. Check [docs/roadmap.md](docs/roadmap.md) for what is established vs open.
-3. For stack choices, use [research issues](.github/ISSUE_TEMPLATE/research.md) or [architecture-decision issues](.github/ISSUE_TEMPLATE/architecture-decision.md).
+1. Read [AGENTS.md](AGENTS.md) (agents) or [docs/README.md](docs/README.md) (humans).
+2. For code: [docs/v0.1-scope.md](docs/v0.1-scope.md), [docs/implementation-guide.md](docs/implementation-guide.md), [docs/architecture/contracts.md](docs/architecture/contracts.md).
+3. Skim [docs/project-foundation-v0.1.md](docs/project-foundation-v0.1.md) and [docs/roadmap.md](docs/roadmap.md).
+4. For new decisions, use [research issues](.github/ISSUE_TEMPLATE/research.md) or [architecture-decision issues](.github/ISSUE_TEMPLATE/architecture-decision.md).
 
 ## What we welcome now
 
+- **Implementation spikes** and walking-skeleton code per [docs/research/implementation-spikes.md](docs/research/implementation-spikes.md) and [docs/implementation-guide.md](docs/implementation-guide.md)
 - Research notes under `docs/research/` (linked from the [tracker](docs/research/README.md))
-- Clarifications and corrections to foundation/thematic docs (foundation is canonical)
-- Updates to `.ai/` summaries when architectural rules or capability examples change
+- Clarifications to foundation/thematic docs (foundation is canonical; ADRs are decision source of truth for stack)
+- Updates to `.ai/` and [AGENTS.md](AGENTS.md) when rules change
 - Governance and process improvements
 
 ## What we are not accepting yet
 
-- Empty `packages/`, `modules/`, `plugins/`, or `themes/` scaffolding
-- Core/kernel implementation without an approved architecture decision
-- Docs that present Fastify, Next.js, Drizzle, or similar as **final** choices
+- Full product scope outside [v0.1-scope.md](docs/v0.1-scope.md) OUT list
+- Docs that contradict **Accepted** ADRs ([ADR-001](docs/research/adr-001-drizzle-data-layer.md), [ADR-002](docs/research/adr-002-api-architecture.md)) or present **Proposed** items (Next.js default, license) as shipped
+- Changing [LICENSE.md](LICENSE.md) until [ADR-003](docs/research/adr-003-license.md) is Accepted and counsel agrees
 
 ## Writing standards (strict)
 
-All contributions must use **keyboard-only characters** (standard English QWERTY). No smart quotes, special dashes, Unicode ellipsis, section sign, Unicode arrows, box-drawing characters, or emoji anywhere in the repo. See [docs/writing-standards.md](docs/writing-standards.md).
+Repo **documentation and tooling** use **keyboard-only characters** (standard English QWERTY). **Runtime i18n** (locale files, user content, CMS fields) will use Unicode and are exempt when implemented - see [docs/writing-standards.md](docs/writing-standards.md).
 
 ## Local checks (keyboard-only)
 
@@ -47,12 +49,12 @@ Staged-only (what the hook runs):
 npm run check:ascii -- --staged
 ```
 
-Requires Node 18+. Pull requests also run the check in GitHub Actions (`.github/workflows/keyboard-only.yml`).
+Requires Node 22+. Pull requests also run the check in GitHub Actions (`.github/workflows/keyboard-only.yml`).
 
 ## Documentation changes
 
-- Thematic docs (**vision**, **architecture**, etc.) should **summarize** and link to [project-foundation-v0.1.md](docs/project-foundation-v0.1.md), not duplicate or contradict it.
-- If you change rules or capability examples, update [.ai/conventions.md](.ai/conventions.md) and [.ai/capabilities.json](.ai/capabilities.json) (or [.ai/capabilities.md](.ai/capabilities.md)) in the same PR.
+- Thematic docs should **summarize** and link to foundation + ADRs, not duplicate long sections.
+- If you change rules or capability examples, update [.ai/conventions.md](.ai/conventions.md) and [.ai/capabilities.json](.ai/capabilities.json) (or [.ai/capabilities.md](.ai/capabilities.md)) and [AGENTS.md](AGENTS.md) in the same PR.
 
 ## Pull requests
 
@@ -64,4 +66,4 @@ See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Governance
 
-Decision process for major choices: [GOVERNANCE.md](GOVERNANCE.md).
+Decision process: [GOVERNANCE.md](GOVERNANCE.md).

@@ -13,6 +13,8 @@ analytics, authentication, cdn, image-processing, ...
 
 Discovery is dynamic: a Razorpay plugin **implements** `payment`; a Shiprocket plugin **implements** `shipping`.
 
+**Search (proposed stack v0.2):** PostgreSQL as baseline; optional **SearchProvider** plugins (Meilisearch, Typesense, Elasticsearch). See [research/stack-direction-v0.2.md](research/stack-direction-v0.2.md#7-search-proposed-postgresql-first--searchprovider).
+
 Machine-readable examples: [../.ai/capabilities.json](../.ai/capabilities.json) (`"documentationOnly": true`).
 
 ## Provider contracts

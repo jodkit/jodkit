@@ -1,9 +1,39 @@
 # JodKit architecture (agent summary)
 
-**Phase:** Architecture / Research - no runtime platform in this repository yet.  
+**Phase:** Architecture / Research - walking skeleton + spikes next ([roadmap](../docs/roadmap.md)).  
+**Entry:** [AGENTS.md](../AGENTS.md)  
 **Canonical source:** [docs/project-foundation-v0.1.md](../docs/project-foundation-v0.1.md)
 
 **Writing:** Keyboard-only (ASCII) characters only. See [docs/writing-standards.md](../docs/writing-standards.md).
+
+## Stack status (v0.2)
+
+**Selected / Accepted (planning commitment - not implemented):**
+
+- Backend: Fastify
+- Database: PostgreSQL
+- Data layer: Drizzle + SQL escape hatch ([ADR-001](../docs/research/adr-001-drizzle-data-layer.md))
+- API: REST + OpenAPI + MCP for v0.1; GraphQL v0.5+ ([ADR-002](../docs/research/adr-002-api-architecture.md))
+- Validate ADR-001/002 via [implementation-spikes.md](../docs/research/implementation-spikes.md)
+
+**v0.1 wedge (build first):** defineCollection, capability/provider registry, generated REST + OpenAPI + MCP - not commerce, themes, multi-site, or GraphQL.
+
+**Proposed (strong direction - NOT implemented; do not code as if decided):**
+
+- Frontend: Next.js default adapter; core frontend-agnostic
+- Commerce: native module; Medusa/Vendure study only (deferred)
+- Queue: BullMQ, PostgreSQL backend first; pg-boss/Graphile as fallback adapters
+- Search: PostgreSQL first + SearchProvider
+- Plugins: trusted + permission **declarations** (not sandbox enforcement)
+- Themes: contract + Next.js renderer first (deferred)
+- Admin: shadcn/ui + TanStack; ~8 field types first (v0.2)
+- License: AGPL 3.0 preferred candidate
+
+**Before public release:**
+
+- License final choice ([ADR-003 Proposed](../docs/research/adr-003-license.md)) - does not block private kernel work
+
+Detail: [docs/research/stack-direction-v0.2.md](../docs/research/stack-direction-v0.2.md).
 
 ## Layer model
 
@@ -28,10 +58,6 @@
 ## CMS / admin (target)
 
 Schema-driven collections; metadata-driven admin from field types. Auto-generate APIs, types, permissions, search, webhooks, MCP from schema where possible.
-
-## Stack status
-
-Backend framework, ORM, default frontend, API style, commerce engine, license - **not chosen**. Treat mentions of Fastify, Next.js, Drizzle, etc. as research candidates only. See [docs/roadmap.md](../docs/roadmap.md).
 
 ## Intended future monorepo (not on disk yet)
 

@@ -36,7 +36,9 @@ Schema-driven collections with generated persistence, validation, admin, APIs, p
 
 ## Ecommerce module (conceptual)
 
-Optional first-class module: catalog, variants, cart, checkout, orders, inventory, promotions, etc. Payment/shipping/tax/storage use **provider plugins**, not hard-coded vendors. Commerce engine approach (native vs integrate vs hybrid) is **not final** - see [providers](providers.md).
+Optional first-class module: catalog, variants, cart, checkout, orders, inventory, promotions, etc. Payment/shipping/tax/storage use **provider plugins**, not hard-coded vendors.
+
+**Proposed (stack v0.2):** Native JodKit commerce module; Medusa and Vendure as **study references only** - not embedded engines. Detail: [research/stack-direction-v0.2.md](research/stack-direction-v0.2.md#5-commerce-proposed-native-module).
 
 ## Example compositions
 

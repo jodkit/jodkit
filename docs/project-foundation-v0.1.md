@@ -5,7 +5,7 @@
 **Status:** Initial Foundation  
 **Purpose:** Define the product vision, architectural principles, major capabilities, and open technical decisions before implementation.  
 **Document version:** 0.1  
-**Last updated:** 2026-10-08
+**Last updated:** 2026-10-07
 
 ---
 
@@ -931,11 +931,9 @@ Integrate an existing commerce engine such as Medusa or Vendure.
 
 Study existing systems such as Medusa and Vendure and build a native commerce engine that follows our platform contracts.
 
-Current direction:
+**Proposed direction (stack v0.2):** Native JodKit commerce module informed by Medusa and Vendure as **study references only** - not embedded engines (Option C). Not ADR-accepted yet.
 
-> **Option C is the preferred area for investigation, but it is not finalized.**
-
-The goal is to avoid reinventing proven concepts while ensuring commerce fits naturally into the platform architecture.
+The goal is to avoid reinventing proven concepts while ensuring commerce fits naturally into the platform architecture. Detail: [docs/research/stack-direction-v0.2.md](research/stack-direction-v0.2.md).
 
 ---
 
@@ -956,6 +954,8 @@ MCP
 ```
 
 Different clients should be able to consume the same underlying platform capabilities.
+
+**Accepted direction:** Metadata-driven codegen across REST, OpenAPI, optional GraphQL, webhooks, and MCP - see [ADR-002](research/adr-002-api-architecture.md).
 
 ---
 
@@ -1327,9 +1327,7 @@ platform site import
 
 ## 36. Database
 
-PostgreSQL is currently the leading database candidate.
-
-The final database architecture is not yet frozen.
+**PostgreSQL is the selected database.** Data layer: **Drizzle + raw SQL escape hatch** via JodKit Data Layer interfaces - [ADR-001](research/adr-001-drizzle-data-layer.md).
 
 Important requirements:
 
@@ -1343,17 +1341,7 @@ Important requirements:
 - AI-friendly schema
 - Good TypeScript ecosystem
 
-A future project should evaluate database/ORM options rather than selecting one prematurely.
-
-Potential candidates include:
-
-```text
-Drizzle
-Prisma
-Kysely
-Raw SQL
-Other TypeScript-native approaches
-```
+**Accepted:** Drizzle as primary ORM; tagged raw SQL escape hatch; Kysely documented for legacy SQL-only plugin paths; Prisma deferred. Comparison: [orm-comparison.md](research/orm-comparison.md).
 
 ---
 
@@ -1847,99 +1835,39 @@ The following are strong project directions:
 - Strong security model
 - Stable contracts
 - Future migration tooling
+- **Backend framework: Fastify** (selected)
+- **Database: PostgreSQL** (selected)
+- **Data layer:** Drizzle + raw SQL escape hatch via JodKit Data Layer interfaces ([ADR-001](research/adr-001-drizzle-data-layer.md))
+- **API architecture:** REST + OpenAPI baseline; optional GraphQL; MCP for AI; metadata-driven generation ([ADR-002](research/adr-002-api-architecture.md))
+- Stack direction v0.2 (remaining proposed items): [docs/research/stack-direction-v0.2.md](research/stack-direction-v0.2.md)
 
 ---
 
 ## 54. Decisions NOT Yet Final
 
-The following must remain open until proper technical research:
+Technical stack uses three tiers: **Selected** (section 53), **Proposed direction** (strong guidance, not ADR-accepted), **Research required** (comparison + ADR before Accepted). Full rationale: [docs/research/stack-direction-v0.2.md](research/stack-direction-v0.2.md).
 
-### Backend framework
+### Selected (see section 53)
 
-```text
-Fastify
-NestJS
-Hono
-Other
-```
+- Backend: Fastify
+- Database: PostgreSQL
 
-### Frontend
+### Proposed direction (stack v0.2)
 
-```text
-Next.js
-Astro
-Nuxt
-SvelteKit
-Other
-```
+- **Frontend:** Next.js as default distribution adapter; platform core remains frontend-agnostic
+- **Commerce:** Native JodKit commerce; study Medusa/Vendure - do not integrate as core dependency
+- **Queue:** BullMQ abstraction; PostgreSQL backend initially; Redis optional later
+- **Search:** PostgreSQL baseline; SearchProvider for Meilisearch, Typesense, Elasticsearch, etc.
+- **Plugins:** Trusted server plugins initially; permissions (db, network, filesystem, secrets, events) from day one
+- **Themes:** Framework-independent theme contract; Next.js renderer first
+- **Admin:** JodKit-owned React/TypeScript metadata-driven admin
+- **License:** AGPL 3.0 preferred candidate - not finalized
 
-### Database access
+### Research required before acceptance
 
-```text
-Drizzle
-Prisma
-Kysely
-Raw SQL
-Other
-```
+- **License:** AGPL vs MIT vs Apache 2.0 vs dual licensing; plugins, themes, SaaS, commercial extensions ([ADR-003 Proposed](research/adr-003-license.md))
 
-### API architecture
-
-```text
-REST
-GraphQL
-tRPC
-Combination
-```
-
-### Commerce
-
-```text
-Native
-Medusa integration
-Vendure integration
-Hybrid
-```
-
-### Queue
-
-```text
-Redis/BullMQ
-Database
-Other
-```
-
-### Search
-
-```text
-PostgreSQL
-Meilisearch
-Typesense
-Elasticsearch
-Other
-```
-
-### License
-
-```text
-MIT
-AGPL
-Other
-```
-
-### Plugin sandboxing
-
-Architecture still requires research.
-
-### Theme rendering architecture
-
-Still requires research.
-
-### Admin framework
-
-Still requires research.
-
-These decisions should be made **after architecture and ecosystem research**, not before.
+**Public release** remains gated until the **license ADR is Accepted** and [LICENSE.md](../LICENSE.md) is updated (per [GOVERNANCE.md](../GOVERNANCE.md)). Pre-release kernel work may proceed in private or all-rights-reserved repos. ORM and API direction is closed via [ADR-001](research/adr-001-drizzle-data-layer.md) and [ADR-002](research/adr-002-api-architecture.md) but must be **validated by implementation spikes** ([implementation-spikes.md](research/implementation-spikes.md)) before large-scale build-out.
 
 ---
 
@@ -1952,6 +1880,8 @@ We should first create a proper technical comparison of existing technologies an
 Research areas:
 
 ### Backend
+
+**Selected:** Fastify (see section 53). Comparison notes below may still inform plugin and DI patterns.
 
 Compare:
 
@@ -2225,9 +2155,9 @@ That is the central idea behind the project.
 
 ## 59. Project Status
 
-**Current stage: Architecture / Research**
+**Current stage: Architecture / Research + pre-code implementation contracts**
 
-We should **not start large-scale implementation yet**.
+For **what to build now**, [implementation-guide.md](implementation-guide.md) and [v0.1-scope.md](v0.1-scope.md) supersede this section until walking skeleton lands. We should **not start large-scale product features** outside v0.1 scope.
 
 The immediate objective is to turn this foundation into a detailed technical architecture after researching the strongest existing systems and deciding what should be:
 

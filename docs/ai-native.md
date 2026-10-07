@@ -1,6 +1,8 @@
 # AI-native architecture
 
-AI is not a bolt-on admin chatbot. JodKit is designed so agents can understand **architecture, modules, plugins, schemas, permissions, and APIs** without reading the entire codebase.
+AI is not a bolt-on admin chatbot. The durable differentiator is **one metadata definition** (collections, fields, permissions) that generates **REST, OpenAPI, MCP**, and (later) admin UI behind **stable capability contracts** - not copy-paste `.ai/` folders or `llms.txt` alone.
+
+Agents should still read [AGENTS.md](../AGENTS.md), OpenAPI, and manifests to navigate a deployment without reading every plugin file.
 
 ## Machine-readable surfaces (planned)
 
@@ -15,6 +17,8 @@ Each deployed project should expose structured metadata (modules, plugins, theme
 ## MCP
 
 MCP is a first-class **capability**. Tools (e.g. `search_products`, `get_page`) depend on **installed modules** - no ecommerce module, no ecommerce MCP tools.
+
+MCP **complements** REST and GraphQL; it does not replace them. Human integrations and most clients use REST/OpenAPI or GraphQL; agents use MCP ([stack-direction-v0.2.md](research/stack-direction-v0.2.md#3-api-proposed-rest--openapi--graphql--mcp)).
 
 ## CLI ideas (not implemented)
 

@@ -2,7 +2,7 @@
 
 An open-source, modular, **AI-native** full-stack web application platform - a modern alternative to WordPress that combines CMS, themes, plugins, APIs, optional ecommerce, and custom application development under one extensible architecture.
 
-**Status:** Architecture / Research - documentation and design only. No kernel, CLI, or fixed technology stack (Fastify, Next.js, Drizzle, etc. are **candidates**, not decisions).
+**Status:** Pre-release **implementation spikes + walking skeleton** ([implementation-guide](docs/implementation-guide.md), [v0.1-scope](docs/v0.1-scope.md)). **Selected / Accepted:** Fastify, PostgreSQL, [ADR-001](docs/research/adr-001-drizzle-data-layer.md), [ADR-002](docs/research/adr-002-api-architecture.md). **License before public release:** [ADR-003 Proposed](docs/research/adr-003-license.md). **Agents:** [AGENTS.md](AGENTS.md).
 
 ## Documentation
 

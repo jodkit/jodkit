@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$comment": "JodKit documentation artifact - NOT live platform state. No capability registry exists until kernel implementation.",
   "documentationOnly": true,
-  "platformPhase": "architecture-research",
+  "platformPhase": "implementation-spikes-walking-skeleton",
   "description": "Example capability IDs and provider declarations for AI agents planning JodKit extensions.",
   "capabilityIds": [
     "payment",

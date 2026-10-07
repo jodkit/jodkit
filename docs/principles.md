@@ -2,6 +2,10 @@
 
 These principles govern JodKit architecture and documentation. They are **laws** for implementation once coding begins.
 
+> JodKit should own the architecture; libraries should provide infrastructure without becoming JodKit's architecture.
+
+Stack implications: [research/stack-direction-v0.2.md](research/stack-direction-v0.2.md).
+
 ## Modularity
 
 > **Install only what you need. Extend only what you need. Run only what you need.**
