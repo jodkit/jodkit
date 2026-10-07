@@ -43,14 +43,19 @@ export class PostgresProductStore implements ProductStore {
     return row ? rowToRecord(row) : undefined;
   }
 
-  async create(input: CreateProductInput): Promise<ProductRecord> {
+  async create(input: CreateProductInput | Record<string, unknown>): Promise<ProductRecord> {
+    const body: CreateProductInput = {
+      name: String(input.name),
+      slug: String(input.slug),
+      price: Number(input.price),
+    };
     try {
       const rows = await this.db
         .insert(jodkitProducts)
         .values({
-          name: input.name,
-          slug: input.slug,
-          price: String(input.price),
+          name: body.name,
+          slug: body.slug,
+          price: String(body.price),
         })
         .returning();
       const row = rows[0];
@@ -64,7 +69,10 @@ export class PostgresProductStore implements ProductStore {
     }
   }
 
-  async patch(id: string, input: PatchProductInput): Promise<ProductRecord | undefined> {
+  async patch(
+    id: string,
+    input: PatchProductInput | Record<string, unknown>,
+  ): Promise<ProductRecord | undefined> {
     const existing = await this.get(id);
     if (!existing) return undefined;
 

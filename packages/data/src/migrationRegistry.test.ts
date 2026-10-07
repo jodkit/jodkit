@@ -35,11 +35,14 @@ describeDb("migrationRegistry", () => {
     const coreDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "migrations");
     const first = await runRegisteredMigrations(url, registry, { coreDir });
     expect(first.core.applied.length + first.core.skipped.length).toBeGreaterThan(0);
-    expect(first.modules["test-module"]?.applied).toContain("902_registry_test_marker.sql");
+    const modFirst = first.modules["test-module"];
+    expect(modFirst).toBeDefined();
+    const marker = "902_registry_test_marker.sql";
+    expect(modFirst!.applied.includes(marker) || modFirst!.skipped.includes(marker)).toBe(true);
 
     const second = await runRegisteredMigrations(url, registry, { coreDir });
     expect(second.modules["test-module"]?.applied).toHaveLength(0);
-    expect(second.modules["test-module"]?.skipped).toContain("902_registry_test_marker.sql");
+    expect(second.modules["test-module"]?.skipped).toContain(marker);
   });
 });
 

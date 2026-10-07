@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./products": "./src/collections/products.ts"
+    "./products": "./src/collections/products.ts",
+    "./users": "./src/collections/users.ts"
   },
   "scripts": {
     "test": "vitest run"

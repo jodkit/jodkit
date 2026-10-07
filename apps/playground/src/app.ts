@@ -1,24 +1,31 @@
-import { buildOpenApiDoc } from "@jodkit/api";
+import { buildOpenApiDoc, registerAdminCollectionRoutes } from "@jodkit/api";
 import {
   createMigrationRegistry,
   defaultMigrationsDir,
   PostgresProductStore,
+  PostgresUserStore,
   runRegisteredMigrations,
-  type ProductStore,
 } from "@jodkit/data";
-import { Kernel } from "@jodkit/kernel";
+import { runWithRequestAuth, Kernel } from "@jodkit/kernel";
 import { buildMcpTools, invokeTool, type McpTool } from "@jodkit/mcp";
+import { getCollections } from "@jodkit/schema";
+import "@jodkit/schema/products";
+import "@jodkit/schema/users";
 import { productsCollection } from "@jodkit/schema/products";
+import { usersCollection } from "@jodkit/schema/users";
 import Fastify, { type FastifyInstance } from "fastify";
 import pg from "pg";
+import { parseRequestSubject } from "./auth/requestSubject.js";
 import { helloPlugin } from "./plugins/helloPlugin.js";
 import { createProductsModule, PRODUCTS_MODULE_ID } from "./modules/productsModule.js";
+import { createUsersModule, USERS_MODULE_ID } from "./modules/usersModule.js";
 import { stubStorageModule } from "./modules/stubStorageModule.js";
 
 export type PlaygroundApp = {
   app: FastifyInstance;
   kernel: Kernel;
-  store: ProductStore;
+  productStore: PostgresProductStore;
+  userStore: PostgresUserStore;
   pool: pg.Pool;
   mcpTools: McpTool[];
 };
@@ -31,25 +38,41 @@ export async function buildPlaygroundApp(databaseUrl: string): Promise<Playgroun
   });
 
   const pool = new pg.Pool({ connectionString: databaseUrl });
-  const store = new PostgresProductStore(pool);
+  const productStore = new PostgresProductStore(pool);
+  const userStore = new PostgresUserStore(pool);
 
   const kernel = new Kernel();
   await kernel.boot();
 
   const app = Fastify({ logger: false });
 
-  kernel.registerModule(createProductsModule(store));
+  app.addHook("onRequest", (req, reply, done) => {
+    const subject = parseRequestSubject(req);
+    runWithRequestAuth(subject, () => done());
+  });
+
+  kernel.registerModule(createProductsModule(productStore));
+  kernel.registerModule(createUsersModule(userStore));
   kernel.registerModule(stubStorageModule);
   kernel.registerPlugin(helloPlugin);
 
-  const mcpTools = buildMcpTools(productsCollection, store, {
+  const productMcp = buildMcpTools(productsCollection, productStore, {
     isEnabled: () => kernel.isModuleEnabled(PRODUCTS_MODULE_ID),
     can: (action) => kernel.can(action, `collection:${productsCollection.slug}`),
+  });
+  const userMcp = buildMcpTools(usersCollection, userStore, {
+    isEnabled: () => kernel.isModuleEnabled(USERS_MODULE_ID),
+    can: (action) => kernel.can(action, `collection:${usersCollection.slug}`),
+  });
+  const mcpTools = [...productMcp, ...userMcp];
+
+  registerAdminCollectionRoutes(app, {
+    can: (action) => kernel.can(action),
   });
 
   app.get("/health", async () => ({ ok: true, version: kernel.version }));
 
-  const openApi = buildOpenApiDoc([productsCollection], {
+  const openApi = buildOpenApiDoc(getCollections(), {
     title: "JodKit Playground API",
     version: kernel.version,
   });
@@ -82,12 +105,13 @@ export async function buildPlaygroundApp(databaseUrl: string): Promise<Playgroun
     await pool.end();
   });
 
-  return { app, kernel, store, pool, mcpTools };
+  return { app, kernel, productStore, userStore, pool, mcpTools };
 }
 
 export async function enableWalkingSkeletonModules(playground: PlaygroundApp): Promise<void> {
   const ctx = { kernel: playground.kernel, app: playground.app };
   await playground.kernel.enableModule(PRODUCTS_MODULE_ID, ctx);
+  await playground.kernel.enableModule(USERS_MODULE_ID, ctx);
   await playground.kernel.enableModule("stub-storage-demo", ctx);
   await playground.kernel.enableModule("hello-plugin", ctx);
 }

@@ -1,5 +1,6 @@
 import { createCapabilityRegistry } from "./capabilities.js";
 import { createEventBus } from "./eventBus.js";
+import { getRequestSubject } from "./authContext.js";
 import { allowAllPermissionChecker } from "./permissions.js";
 import type {
   KernelLike,
@@ -30,8 +31,9 @@ export class Kernel implements KernelLike {
     this.permissionChecker = checker;
   }
 
-  async can(action: string, resource?: string, subject = "anonymous"): Promise<boolean> {
-    return this.permissionChecker.can(subject, action, resource);
+  async can(action: string, resource?: string, subject?: string): Promise<boolean> {
+    const sub = subject ?? getRequestSubject();
+    return this.permissionChecker.can(sub, action, resource);
   }
 
   isModuleEnabled(id: string): boolean {

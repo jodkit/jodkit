@@ -23,5 +23,6 @@ const spike2Env = loadDotEnv(path.join(dir, "..", "..", "apps", "spike-2-schema"
 export default defineConfig({
   test: {
     env: { ...spike2Env, ...loadDotEnv(path.join(dir, ".env")) },
+    fileParallelism: false,
   },
 });

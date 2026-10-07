@@ -1,9 +1,5 @@
-import type { ProductStore } from "@jodkit/data";
-import {
-  asProductCreateInput,
-  validateCollectionInput,
-  type CollectionDefinition,
-} from "@jodkit/schema";
+import type { CollectionRecordStore } from "@jodkit/data";
+import { validateCollectionInput, type CollectionDefinition } from "@jodkit/schema";
 
 export type McpTool = {
   name: string;
@@ -18,15 +14,11 @@ export type McpToolOptions = {
 
 export function buildMcpTools(
   collection: CollectionDefinition,
-  store: ProductStore,
+  store: CollectionRecordStore,
   options: McpToolOptions = {},
 ): McpTool[] {
   const gate = options.isEnabled ?? (() => true);
   const can = options.can ?? (async () => true);
-
-  if (collection.slug !== "products") {
-    return [];
-  }
 
   const assertEnabled = () => {
     if (!gate()) throw new Error("MODULE_DISABLED");
@@ -70,7 +62,7 @@ export function buildMcpTools(
         if (!validated.ok) {
           throw new Error(`VALIDATION_ERROR:${JSON.stringify(validated.errors)}`);
         }
-        return store.create(asProductCreateInput(validated.value));
+        return store.create(validated.value);
       },
     },
   ];

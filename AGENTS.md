@@ -4,7 +4,7 @@ Coding agents: read this file first, then the linked artifacts.
 
 ## Project phase
 
-**Walking skeleton** (pre-release). Spikes 1-5 are **complete** (`npm run test:spikes`); build in `packages/*` and [apps/playground](apps/playground/). Spike apps under `apps/spike-*` are frozen regression evidence. License ADR is **not** a blocker for private pre-release code; public release needs [ADR-003](docs/research/adr-003-license.md) and [LICENSE.md](LICENSE.md).
+**v0.2 slice 1** (pre-release): auth subject hooks, `users` collection, minimal admin API. v0.1 complete in `packages/*` and [apps/playground](apps/playground/). Spikes under `apps/spike-*` are frozen regression evidence (`npm run test:spikes`). Scope: [docs/v0.2-scope.md](docs/v0.2-scope.md). License ADR is **not** a blocker for private pre-release code; public release needs [ADR-003](docs/research/adr-003-license.md) and [LICENSE.md](LICENSE.md).
 
 ## Canonical docs (build tasks)
 

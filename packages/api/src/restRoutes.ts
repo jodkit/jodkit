@@ -1,10 +1,5 @@
-import type { ProductStore } from "@jodkit/data";
-import {
-  asProductCreateInput,
-  asProductPatchInput,
-  validateCollectionInput,
-  type CollectionDefinition,
-} from "@jodkit/schema";
+import type { CollectionRecordStore } from "@jodkit/data";
+import { validateCollectionInput, type CollectionDefinition } from "@jodkit/schema";
 import type { FastifyInstance } from "fastify";
 
 export type RestRouteOptions = {
@@ -17,7 +12,7 @@ export type RestRouteOptions = {
 export function registerCollectionRestRoutes(
   app: FastifyInstance,
   collection: CollectionDefinition,
-  store: ProductStore,
+  store: CollectionRecordStore,
   options: RestRouteOptions = {},
 ): void {
   const base = `/api/${collection.slug}`;
@@ -66,7 +61,7 @@ export function registerCollectionRestRoutes(
       });
     }
     try {
-      const created = await store.create(asProductCreateInput(validated.value));
+      const created = await store.create(validated.value);
       return reply.code(201).send(created);
     } catch (e) {
       if (e instanceof Error && e.message.startsWith("CONFLICT")) {
@@ -91,7 +86,7 @@ export function registerCollectionRestRoutes(
       });
     }
     try {
-      const updated = await store.patch(id, asProductPatchInput(validated.value));
+      const updated = await store.patch(id, validated.value);
       if (!updated) {
         return reply.code(404).send({ error: { code: "NOT_FOUND", message: "Not found" } });
       }

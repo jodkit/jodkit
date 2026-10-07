@@ -220,7 +220,7 @@ See [apps/playground/README.md](../apps/playground/README.md). Requires `DATABAS
 3. ~~Implement `products` collection end-to-end.~~ **Done** in [apps/playground](../apps/playground/).
 4. ~~**v0.1 hardening:** permission hooks, `registerPlugin` sample, metadata validation, migration registry, MCP permission parity, CI.~~ **Done** (2026-10-07).
 5. ~~Update ADRs with spike outcomes.~~ **ADR-004** accepted; **ADR-005** reserved for module disable UX if needed.
-6. **v0.1 wedge:** treat as **complete** for code proof ([apps/playground](../apps/playground/)); **CLI** and second domain module remain deferred. Next milestone: **v0.2** ([roadmap.md](roadmap.md)).
+6. ~~**v0.1 wedge**~~ **Complete.** **v0.2 slice 1:** auth subject, `users` collection, `GET /admin/collections` ([v0.2-scope.md](v0.2-scope.md)). **CLI** deferred.
 
 ## What not to build yet
 

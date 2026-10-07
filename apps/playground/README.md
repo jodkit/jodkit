@@ -17,6 +17,10 @@ Endpoints:
 
 - `GET /health`
 - `GET /openapi.json`
-- CRUD `/api/products`
+- CRUD `/api/products`, `/api/users`
+- `GET /admin/collections` (requires `admin:collections:read`; use header `X-JodKit-Subject: admin` with dev checker)
 - `POST /mcp/invoke` with `{ "name": "products_list", "args": {} }`
 - `GET /demo/storage/ping` (stub storage capability)
+- `GET /plugins/hello/ping` (sample plugin)
+
+Dev auth stub: `X-JodKit-Subject: <subject>` or `Authorization: Bearer <subject>`.
