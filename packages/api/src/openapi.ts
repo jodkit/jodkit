@@ -72,6 +72,7 @@ export function buildOpenApiDoc(
 function openApiType(fieldType: string): string {
   switch (fieldType) {
     case "number":
+    case "money":
       return "number";
     case "boolean":
       return "boolean";

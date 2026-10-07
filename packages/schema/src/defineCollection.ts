@@ -3,6 +3,7 @@ export type FieldType =
   | "string"
   | "text"
   | "number"
+  | "money"
   | "boolean"
   | "datetime"
   | "json";
@@ -13,6 +14,8 @@ export type FieldDefinition = {
   required?: boolean;
   unique?: boolean;
   primaryKey?: boolean;
+  /** Allowed values for string/text fields (metadata validation only). */
+  enum?: string[];
 };
 
 export type CollectionDefinition = {

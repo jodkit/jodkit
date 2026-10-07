@@ -2,6 +2,7 @@ import { buildOpenApiDoc, registerAdminCollectionRoutes } from "@jodkit/api";
 import {
   createMigrationRegistry,
   defaultMigrationsDir,
+  PostgresPageStore,
   PostgresProductStore,
   PostgresUserStore,
   runRegisteredMigrations,
@@ -9,8 +10,10 @@ import {
 import { runWithRequestAuth, Kernel } from "@jodkit/kernel";
 import { buildMcpTools, invokeTool, type McpTool } from "@jodkit/mcp";
 import { getCollections } from "@jodkit/schema";
+import "@jodkit/schema/pages";
 import "@jodkit/schema/products";
 import "@jodkit/schema/users";
+import { pagesCollection } from "@jodkit/schema/pages";
 import { productsCollection } from "@jodkit/schema/products";
 import { usersCollection } from "@jodkit/schema/users";
 import Fastify, { type FastifyInstance } from "fastify";
@@ -18,6 +21,7 @@ import pg from "pg";
 import { parseRequestSubject } from "./auth/requestSubject.js";
 import { helloPlugin } from "./plugins/helloPlugin.js";
 import { createProductsModule, PRODUCTS_MODULE_ID } from "./modules/productsModule.js";
+import { createPagesModule, PAGES_MODULE_ID } from "./modules/pagesModule.js";
 import { createUsersModule, USERS_MODULE_ID } from "./modules/usersModule.js";
 import { stubStorageModule } from "./modules/stubStorageModule.js";
 
@@ -26,6 +30,7 @@ export type PlaygroundApp = {
   kernel: Kernel;
   productStore: PostgresProductStore;
   userStore: PostgresUserStore;
+  pageStore: PostgresPageStore;
   pool: pg.Pool;
   mcpTools: McpTool[];
 };
@@ -40,6 +45,7 @@ export async function buildPlaygroundApp(databaseUrl: string): Promise<Playgroun
   const pool = new pg.Pool({ connectionString: databaseUrl });
   const productStore = new PostgresProductStore(pool);
   const userStore = new PostgresUserStore(pool);
+  const pageStore = new PostgresPageStore(pool);
 
   const kernel = new Kernel();
   await kernel.boot();
@@ -53,6 +59,7 @@ export async function buildPlaygroundApp(databaseUrl: string): Promise<Playgroun
 
   kernel.registerModule(createProductsModule(productStore));
   kernel.registerModule(createUsersModule(userStore));
+  kernel.registerModule(createPagesModule(pageStore));
   kernel.registerModule(stubStorageModule);
   kernel.registerPlugin(helloPlugin);
 
@@ -64,7 +71,11 @@ export async function buildPlaygroundApp(databaseUrl: string): Promise<Playgroun
     isEnabled: () => kernel.isModuleEnabled(USERS_MODULE_ID),
     can: (action) => kernel.can(action, `collection:${usersCollection.slug}`),
   });
-  const mcpTools = [...productMcp, ...userMcp];
+  const pageMcp = buildMcpTools(pagesCollection, pageStore, {
+    isEnabled: () => kernel.isModuleEnabled(PAGES_MODULE_ID),
+    can: (action) => kernel.can(action, `collection:${pagesCollection.slug}`),
+  });
+  const mcpTools = [...productMcp, ...userMcp, ...pageMcp];
 
   registerAdminCollectionRoutes(app, {
     can: (action) => kernel.can(action),
@@ -105,13 +116,14 @@ export async function buildPlaygroundApp(databaseUrl: string): Promise<Playgroun
     await pool.end();
   });
 
-  return { app, kernel, productStore, userStore, pool, mcpTools };
+  return { app, kernel, productStore, userStore, pageStore, pool, mcpTools };
 }
 
 export async function enableWalkingSkeletonModules(playground: PlaygroundApp): Promise<void> {
   const ctx = { kernel: playground.kernel, app: playground.app };
   await playground.kernel.enableModule(PRODUCTS_MODULE_ID, ctx);
   await playground.kernel.enableModule(USERS_MODULE_ID, ctx);
+  await playground.kernel.enableModule(PAGES_MODULE_ID, ctx);
   await playground.kernel.enableModule("stub-storage-demo", ctx);
   await playground.kernel.enableModule("hello-plugin", ctx);
 }

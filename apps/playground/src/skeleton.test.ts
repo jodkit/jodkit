@@ -33,7 +33,9 @@ async function truncateTables(connectionString: string): Promise<void> {
   const client = new pg.Client({ connectionString });
   await client.connect();
   try {
-    await client.query('TRUNCATE TABLE "jodkit_products", "jodkit_users" RESTART IDENTITY CASCADE');
+    await client.query(
+      'TRUNCATE TABLE "jodkit_products", "jodkit_users", "jodkit_pages" RESTART IDENTITY CASCADE',
+    );
   } finally {
     await client.end();
   }
@@ -106,12 +108,71 @@ describeDb("walking skeleton", () => {
     expect(body.error.details.length).toBeGreaterThan(0);
   });
 
-  it("OpenAPI document includes products and users paths", async () => {
+  it("POST then GET page via REST (PostgreSQL)", async () => {
+    const create = await playground.app.inject({
+      method: "POST",
+      url: "/api/pages",
+      payload: {
+        slug: "about",
+        title: "About",
+        body: "About us",
+        status: "draft",
+      },
+    });
+    expect(create.statusCode).toBe(201);
+    const created = create.json() as { id: string };
+    expect(created.id).toBeTruthy();
+
+    const get = await playground.app.inject({
+      method: "GET",
+      url: `/api/pages/${created.id}`,
+    });
+    expect(get.statusCode).toBe(200);
+    expect(get.json()).toMatchObject({
+      slug: "about",
+      title: "About",
+      status: "draft",
+    });
+  });
+
+  it("POST page with invalid status returns validation error", async () => {
+    const res = await playground.app.inject({
+      method: "POST",
+      url: "/api/pages",
+      payload: {
+        slug: "bad",
+        title: "Bad",
+        body: "x",
+        status: "archived",
+      },
+    });
+    expect(res.statusCode).toBe(400);
+    const body = res.json() as { error: { code: string; details: unknown[] } };
+    expect(body.error.code).toBe("VALIDATION_ERROR");
+    expect(body.error.details.length).toBeGreaterThan(0);
+  });
+
+  it("OpenAPI document includes products, users, and pages paths", async () => {
     const res = await playground.app.inject({ method: "GET", url: "/openapi.json" });
     expect(res.statusCode).toBe(200);
     const doc = res.json() as { paths: Record<string, unknown> };
     expect(doc.paths["/api/products"]).toBeDefined();
     expect(doc.paths["/api/users"]).toBeDefined();
+    expect(doc.paths["/api/pages"]).toBeDefined();
+  });
+
+  it("MCP pages_create and pages_list smoke", async () => {
+    const created = await invokeTool(playground.mcpTools, "pages_create", {
+      slug: "mcp-page",
+      title: "MCP",
+      body: "From MCP",
+      status: "draft",
+    });
+    const { id } = created as { id: string };
+    expect(id).toBeTruthy();
+
+    const listed = await invokeTool(playground.mcpTools, "pages_list", {});
+    expect((listed as { id: string }[]).some((r) => r.id === id)).toBe(true);
   });
 
   it("MCP tools read same store as REST", async () => {
@@ -178,6 +239,7 @@ describeDb("walking skeleton", () => {
     const body = adminCollections.json() as { data: { slug: string }[] };
     expect(body.data.some((c) => c.slug === "products")).toBe(true);
     expect(body.data.some((c) => c.slug === "users")).toBe(true);
+    expect(body.data.some((c) => c.slug === "pages")).toBe(true);
   });
 
   it("hello plugin ping when allowed", async () => {

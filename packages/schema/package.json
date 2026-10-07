@@ -6,7 +6,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./products": "./src/collections/products.ts",
-    "./users": "./src/collections/users.ts"
+    "./users": "./src/collections/users.ts",
+    "./pages": "./src/collections/pages.ts"
   },
   "scripts": {
     "test": "vitest run"

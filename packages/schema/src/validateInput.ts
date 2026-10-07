@@ -36,7 +36,8 @@ function validateFieldValue(
   }
 
   switch (field.type) {
-    case "number": {
+    case "number":
+    case "money": {
       const n = typeof raw === "number" ? raw : Number(raw);
       if (Number.isNaN(n)) {
         return { field: field.name, code: "INVALID_TYPE", message: `${field.name} must be a number` };
@@ -61,6 +62,13 @@ function validateFieldValue(
           message: `${field.name} must be a non-empty string`,
         };
       }
+      if (field.enum && field.enum.length > 0 && !field.enum.includes(raw)) {
+        return {
+          field: field.name,
+          code: "INVALID_ENUM",
+          message: `${field.name} must be one of: ${field.enum.join(", ")}`,
+        };
+      }
       return undefined;
     }
     default:
@@ -69,7 +77,7 @@ function validateFieldValue(
 }
 
 function coerceFieldValue(field: FieldDefinition, raw: unknown): unknown {
-  if (field.type === "number") {
+  if (field.type === "number" || field.type === "money") {
     return typeof raw === "number" ? raw : Number(raw);
   }
   return raw;

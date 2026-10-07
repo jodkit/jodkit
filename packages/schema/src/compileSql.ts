@@ -12,6 +12,7 @@ function pgType(field: FieldDefinition): string {
     case "text":
       return "text";
     case "number":
+    case "money":
       return "numeric";
     case "boolean":
       return "boolean";

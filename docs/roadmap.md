@@ -1,6 +1,6 @@
 # Roadmap
 
-**Current stage:** **v0.2 slice 1 in progress** (auth subject, `users` collection, admin metadata API). v0.1 complete in [apps/playground](../apps/playground/). Scope: [v0.2-scope.md](v0.2-scope.md). ([Foundation section 59](project-foundation-v0.1.md#59-project-status)).
+**Current stage:** **v0.2 slice 2 in progress** (CMS `pages` collection, `money` + enum field types). Slice 1 (auth subject, `users`, admin metadata API) is complete. v0.1 complete in [apps/playground](../apps/playground/). Scope: [v0.2-scope.md](v0.2-scope.md). ([Foundation section 59](project-foundation-v0.1.md#59-project-status)).
 
 **Selected / Accepted for planning:** Fastify, PostgreSQL, data layer ([ADR-001](research/adr-001-drizzle-data-layer.md)), API ([ADR-002](research/adr-002-api-architecture.md)). **License** is [ADR-003 Proposed](research/adr-003-license.md) - required before **first public release**, not before private or pre-release kernel work ([GOVERNANCE.md](../GOVERNANCE.md)).
 
